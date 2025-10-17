@@ -1,0 +1,4 @@
+# pack-refs with: peeled fully-peeled sorted 
+a6ebe66952248dbbf4a8e2e2b7027dc47580a14f refs/heads/main
+cbc6b5199a4bd2ccde100ea741a519f3c35da866 refs/tags/v0.95-pilot-ready
+^1c0702dd98b3d8bd4b76fc32b52eee9b052109cc

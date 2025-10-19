@@ -1,0 +1,185 @@
+Project Root: cd "C:\Users\Ciaran\Documents\prbuild\projectresilience\Phase2\P2-GovernedAgent"
+
+FILE: arbiter_agent.py (16.3 KB)
+FILE: clean_files_and_folders.txt (12.6 KB)
+FILE: clean_folders.txt (4.0 KB)
+FILE: client.py (2.5 KB)
+FILE: config\architect_spirit.yaml (3.7 KB)
+FILE: config\budget.yaml (276 bytes)
+FILE: config\budget_default.yaml (182 bytes)
+FILE: config\budget_test.yaml (182 bytes)
+FILE: config\guardian_rules.yaml (1.9 KB)
+FILE: config\guardian_spirit.yaml (1.0 KB)
+FILE: config\hfsl_simulators.yaml (258 bytes)
+FILE: config\immune.yaml (833 bytes)
+FILE: config\intro_spirit.yaml (2.7 KB)
+FILE: config\jellyfish.yaml (351 bytes)
+FILE: config\mentor_spirit.yaml (1.6 KB)
+FILE: config\outro_spirit.yaml (2.8 KB)
+FILE: config\rules_core.yaml (1.9 KB)
+FILE: config\sal.yaml (837 bytes)
+FILE: config\spirit_ethos.yaml (1.1 KB)
+FILE: config\summary_spirit.yaml (1.1 KB)
+FILE: config\voice.yaml (1.0 KB)
+FILE: config\XXX OLD FILES\guardian_rules - Copy.yaml (1.4 KB)
+FILE: config\XXX OLD FILES\mentor_spirit - Copy.yaml (2.3 KB)
+FILE: config\XXX OLD FILES\rules_core - Copy.yaml (1.1 KB)
+FILE: CONSTITUTION.md (3.1 KB)
+FILE: core_governance.py (19.4 KB)
+FILE: dispatcher.py (26.6 KB)
+FILE: docs\edgeguardian.md (835 bytes)
+FILE: docs\events.md (1.0 KB)
+FILE: edge_guardian.py (10.1 KB)
+FILE: event_log.py (5.0 KB)
+FILE: experimental_hfsl.py (2.4 KB)
+FILE: HFSL_SPECIFICATION.md (4.1 KB)
+FILE: immune\__init__.py (0 bytes)
+FILE: immune\flash_gate.py (4.5 KB)
+FILE: immune\flash_gate_v0_1_1.py (4.5 KB)
+FILE: infra\prometheus\data\01K47C47FJ911AY4W8FV4RJ69Z\meta.json (274 bytes)
+FILE: infra\prometheus\data\01K47CW1710KWJ3MDT7DTNYPP8\meta.json (276 bytes)
+FILE: infra\prometheus\prai.rules.yml (1.3 KB)
+FILE: infra\prometheus\prometheus.yml (564 bytes)
+FILE: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903182831\01K47C26YDPQRZQE480VK302XM\meta.json (274 bytes)
+FILE: infra\prometheus\READ ME.md (2.0 KB)
+FILE: main.py (6.3 KB)
+FILE: mission_control\mission_control.py (6.9 KB)
+FILE: mission_control\mission_control_top_rewrite.py (0 bytes)
+FILE: prompts\prompt_intro.txt (3.7 KB)
+FILE: prompts\prompt_mentor.txt (2.6 KB)
+FILE: prompts\prompt_outro.txt (1.8 KB)
+FILE: prompts\prompt_summary.txt (2.3 KB)
+FILE: prompts\prompt_system.txt (2.2 KB)
+FILE: READ ME.txt (864 bytes)
+FILE: repo_tree.txt (1.4 MB)
+FILE: requirements.txt (25 bytes)
+FILE: sal.py (13.0 KB)
+FILE: sal\dispatcher_immune_hook.py (1.6 KB)
+FILE: snapshots\2115a01b-da63-492c-bc50-303a17cfc1d0.json (5.9 KB)
+FILE: snapshots\exfil-2.json (353 bytes)
+FILE: snapshots\gov-gray-1.json (399 bytes)
+FILE: snapshots\gov-gray-2.json (399 bytes)
+FILE: snapshots\gov-gray-3.json (399 bytes)
+FILE: snapshots\gov-gray-4.json (399 bytes)
+FILE: snapshots\gov-gray-6.json (399 bytes)
+FILE: snapshots\pre_regen\intro-JF-intro-001-20250903T074353.json (98 bytes)
+FILE: snapshots\pre_regen\intro-JF-intro-001-20250903T074737.json (98 bytes)
+FILE: snapshots\pre_regen\intro-JF-intro-001-20250903T075847.json (98 bytes)
+FILE: snapshots\pre_regen\mentor-JF-mentor-001-20250903T080123.json (100 bytes)
+FILE: snapshots\pre_regen\mentor-regen-test-001-20250903T121544.json (101 bytes)
+FILE: snapshots\pre_regen\outro-JF-outro-001-20250903T080130.json (98 bytes)
+FILE: snapshots\quar-test-3.json (357 bytes)
+FILE: snapshots\regen\intro\JF-intro-001\_ok.txt (10 bytes)
+FILE: snapshots\regen\intro\JF-intro-001\plan.json (273 bytes)
+FILE: snapshots\regen\intro\JF-intro-001\skeleton.json (539 bytes)
+FILE: snapshots\regen\mentor\JF-mentor-001\plan.json (277 bytes)
+FILE: snapshots\regen\mentor\JF-mentor-001\skeleton.json (538 bytes)
+FILE: snapshots\regen\mentor\regen-test-001\plan.json (279 bytes)
+FILE: snapshots\regen\mentor\regen-test-001\skeleton.json (538 bytes)
+FILE: snapshots\regen\outro\JF-outro-001\plan.json (273 bytes)
+FILE: snapshots\regen\outro\JF-outro-001\skeleton.json (531 bytes)
+FILE: snapshots\skeletons\intro.json (539 bytes)
+FILE: snapshots\skeletons\mentor.json (538 bytes)
+FILE: snapshots\skeletons\outro.json (531 bytes)
+FILE: snapshots\test-quar-1.json (337 bytes)
+FILE: state\intro_rehydrated_JF-intro-001.json (248 bytes)
+FILE: state\mentor_rehydrated_JF-mentor-001.json (251 bytes)
+FILE: state\mentor_rehydrated_regen-test-001.json (252 bytes)
+FILE: state\outro_rehydrated_JF-outro-001.json (248 bytes)
+FILE: state\quarantine_worker_state.json (599 bytes)
+FILE: state\usage_2025-08-31.json (46 bytes)
+FILE: state\usage_2025-09-01.json (46 bytes)
+FILE: state\usage_2025-09-02.json (46 bytes)
+FILE: state\usage_2025-09-03.json (45 bytes)
+FILE: state\usage_2025-09-04.json (14 bytes)
+FILE: state\usage_2025-09-05.json (2 bytes)
+FILE: subliminal_proof.py (13.2 KB)
+FILE: test_bypass_prevention.py (4.5 KB)
+FILE: test_illegal_actions.py (2.5 KB)
+FILE: test_kill_recovery.py (2.6 KB)
+FILE: test_violation_logging.py (3.0 KB)
+FILE: tools\__init__.py (0 bytes)
+FILE: tools\check_recover.py (623 bytes)
+FILE: tools\client_guarded.py (3.0 KB)
+FILE: tools\entropy_monitor.py (9.2 KB)
+FILE: tools\force_snapshot.py (1.2 KB)
+FILE: tools\immune_clear.py (4.5 KB)
+FILE: tools\jellyfish.yaml (703 bytes)
+FILE: tools\jellyfish_regen.py (6.2 KB)
+FILE: tools\jellyfish_seed.py (1.6 KB)
+FILE: tools\kill_commit.json (223 bytes)
+FILE: tools\metrics_server.py (9.2 KB)
+FILE: tools\quarantine_worker.py (3.6 KB)
+FILE: tools\resilience_http.py (1.1 KB)
+FILE: tools\secret_sharing.py (1.8 KB)
+FILE: tools\share1.txt (135 bytes)
+FILE: tools\share2.txt (134 bytes)
+FILE: tools\shares.txt (404 bytes)
+FILE: tools\snapshots\skeletons\intro.json (539 bytes)
+FILE: tools\snapshots\skeletons\mentor.json (538 bytes)
+FILE: tools\snapshots\skeletons\outro.json (531 bytes)
+FILE: tools\tokens_monitor.py (8.7 KB)
+FILE: tools\veto_manager.py (4.7 KB)
+FILE: tools\why.py (6.4 KB)
+FILE: tools\why_http.py (6.8 KB)
+FILE: tools\why_server.py (2.9 KB)
+FILE: tools\why_trace.py (4.5 KB)
+FILE: XXXX OLD FILES\core_governance - Copy.py (13.8 KB)
+FILE: XXXX OLD FILES\dispatcher - Copy.py (30.1 KB)
+FILE: XXXX OLD FILES\sal_old.py (5.9 KB)
+FOLDER: .venv
+FOLDER: __pycache__
+FOLDER: backup
+FOLDER: config
+FOLDER: config\XXX OLD FILES
+FOLDER: docs
+FOLDER: immune
+FOLDER: immune\__pycache__
+FOLDER: infra
+FOLDER: infra\prometheus
+FOLDER: infra\prometheus\data
+FOLDER: infra\prometheus\data\01K47C47FJ911AY4W8FV4RJ69Z
+FOLDER: infra\prometheus\data\01K47C47FJ911AY4W8FV4RJ69Z\chunks
+FOLDER: infra\prometheus\data\01K47CW1710KWJ3MDT7DTNYPP8
+FOLDER: infra\prometheus\data\01K47CW1710KWJ3MDT7DTNYPP8\chunks
+FOLDER: infra\prometheus\data\chunks_head
+FOLDER: infra\prometheus\data\wal
+FOLDER: infra\prometheus\data\wal\checkpoint.00000001
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data\chunks_head
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data\wal
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903182831
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903182831\01K47C26YDPQRZQE480VK302XM
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903182831\01K47C26YDPQRZQE480VK302XM\chunks
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903182831\chunks_head
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903182831\wal
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903183028
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903183028\chunks_head
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903183028\wal
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903183139
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903183139\chunks_head
+FOLDER: infra\prometheus\prometheus-3.5.0.windows-amd64\data_old_20250903183139\wal
+FOLDER: infra\pubsub
+FOLDER: mission_control
+FOLDER: mission_control\templates
+FOLDER: prompts
+FOLDER: sal
+FOLDER: snapshots
+FOLDER: snapshots\pre_regen
+FOLDER: snapshots\regen
+FOLDER: snapshots\regen\intro
+FOLDER: snapshots\regen\intro\JF-intro-001
+FOLDER: snapshots\regen\mentor
+FOLDER: snapshots\regen\mentor\JF-mentor-001
+FOLDER: snapshots\regen\mentor\regen-test-001
+FOLDER: snapshots\regen\outro
+FOLDER: snapshots\regen\outro\JF-outro-001
+FOLDER: snapshots\skeletons
+FOLDER: state
+FOLDER: tools
+FOLDER: tools\__pycache__
+FOLDER: tools\snapshots
+FOLDER: tools\snapshots\skeletons
+FOLDER: tools\state
+FOLDER: XXXX OLD FILES

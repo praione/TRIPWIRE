@@ -1,0 +1,44 @@
+﻿# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local state & logs
+state/
+sal_decisions.jsonl
+
+# Ledgers (they live in GCS anyway)
+*.ndjson
+
+# Local overrides
+config/budget.yaml
+
+# Prometheus local data
+infra/prometheus/data/
+# venv & caches
+.venv/
+__pycache__/
+*.pyc
+
+# runtime state & logs
+snapshots/
+sal_decisions.jsonl
+state/
+usage_*.json
+*.log
+
+# Prometheus (local binaries & TSDB)
+infra/prometheus/data/
+infra/prometheus/prometheus-*.windows-amd64/
+infra/prometheus/*.zip
+
+# local secrets / shares (DO NOT COMMIT)
+tools/share*.txt
+tools/kill_commit.json
+
+snapshots/regen/
+snapshots/pre_regen/
+state/*_rehydrated_*.json
+credentials/
+.gcloudignore
+*.copy.py

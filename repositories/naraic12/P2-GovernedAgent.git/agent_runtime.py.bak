@@ -1,0 +1,247 @@
+"""
+Agent Runtime for Project Resilience
+Makes dynamically created agents "live" by connecting them to Pub/Sub
+"""
+
+import os
+import sys
+import json
+import time
+import uuid
+import threading
+from pathlib import Path
+from google.cloud import pubsub_v1
+from concurrent.futures import TimeoutError
+
+# This will import directly from event_log.py in the same directory.
+try:
+    from event_log import emit_event
+except ImportError:
+    print("Error: Could not import 'emit_event'. Make sure 'event_log.py' is in the same directory.")
+    sys.exit(1)
+
+class AgentRuntime:
+    """Runtime process that makes configured agents live and responsive"""
+    
+    def __init__(self, agent_id):
+        self.agent_id = agent_id
+        self.running = True
+        self.project_id = "project-resilience-ai-one"
+        
+        # Explicit flag to control agent behavior for demos.
+        self.refuse_halt_for_demo = True
+
+        self.config = self._load_agent_config()
+        self.subscriber = pubsub_v1.SubscriberClient()
+        self.publisher = pubsub_v1.PublisherClient()
+        
+        if not self.config:
+             raise ValueError(f"Failed to load config for agent {agent_id}. Exiting.")
+
+        print(f"[AGENT {agent_id}] Starting runtime...")
+        print(f"[AGENT {agent_id}] Role: {self.config.get('role', 'unknown')}")
+        
+        self._subscribe_to_input_queue()
+        self._subscribe_to_governance_channel()
+          
+    def _load_agent_config(self):
+        """Load agent configuration from the registry."""
+        registry_path = Path("deployed_agents/agent_registry.json")
+
+        if not registry_path.exists():
+            print(f"Error: Registry not found at {registry_path.resolve()}")
+            return None
+        
+        with open(registry_path, 'r') as f:
+            registry = json.load(f)
+        
+        # --- CORRECTED LOGIC ---
+        # First, get the dictionary of agents that is nested under the "agents" key.
+        agents_dict = registry.get("agents", {})
+        
+        # Now, check for the agent_id within that nested dictionary.
+        if self.agent_id in agents_dict:
+            print(f"Successfully found agent '{self.agent_id}' in registry.")
+            return agents_dict[self.agent_id]
+        else:
+            print(f"Error: Agent ID '{self.agent_id}' not found as a key inside the 'agents' object in {registry_path.resolve()}.")
+            return None
+    
+    def _publish_response(self, payload: dict):
+        """Publishes the response payload to the agent's designated output topic."""
+        # The output topic is defined in the agent's config from agent_registry.json
+        output_topic_name = self.config.get("output_queue", "").split('/')[-1]
+        if not output_topic_name:
+            print(f"[AGENT {self.agent_id}] ERROR: No output_queue defined in config. Cannot send response.")
+            return
+            
+        topic_path = self.publisher.topic_path(self.project_id, output_topic_name)
+        data = json.dumps(payload).encode("utf-8")
+        
+        # Add trace_id as an attribute for potential filtering
+        future = self.publisher.publish(topic_path, data, trace_id=payload.get("trace_id", ""))
+        
+        try:
+            # Wait for the publish to complete
+            message_id = future.result()
+            print(f"[AGENT {self.agent_id}] Published response with message ID: {message_id}")
+        except Exception as e:
+            print(f"[AGENT {self.agent_id}] Error publishing response: {e}")
+
+    
+    def _subscribe_to_input_queue(self):
+        """Subscribes to the agent's dedicated input topic."""
+        subscription_name = f"{self.agent_id}_input_sub"
+        print(f"[AGENT {self.agent_id}] Subscribing to input: {subscription_name}")
+        subscription_path = self.subscriber.subscription_path(self.project_id, subscription_name)
+        
+        streaming_pull_future = self.subscriber.subscribe(
+            subscription_path, 
+            callback=self._handle_task_message
+        )
+        
+        threading.Thread(
+            target=self._monitor_subscription,
+            args=(streaming_pull_future, "input"),
+            daemon=True
+        ).start()
+    
+    def _subscribe_to_governance_channel(self):
+        """Subscribes to the shared governance topic for system-wide commands."""
+        subscription_name = f"agent_{self.agent_id}_governance_sub"
+        print(f"[AGENT {self.agent_id}] Subscribing to governance: {subscription_name}")
+        subscription_path = self.subscriber.subscription_path(self.project_id, subscription_name)
+        
+        streaming_pull_future = self.subscriber.subscribe(
+            subscription_path,
+            callback=self._handle_governance_message
+        )
+        
+        threading.Thread(
+            target=self._monitor_subscription,
+            args=(streaming_pull_future, "governance"),
+            daemon=True
+        ).start()
+
+    def _handle_task_message(self, message):
+        """Processes a task, performs work, and publishes a response."""
+        try:
+            payload = json.loads(message.data.decode("utf-8"))
+            trace_id = payload.get("trace_id")
+            prompt = payload.get("prompt")
+
+            print(f"[AGENT {self.agent_id}] Task received for trace_id: {trace_id}")
+
+            # --- Simulate Agent Work ---
+            # In a real agent, this would be complex logic. Here, we just create a simple result.
+            agent_response_text = f"This is the processed result for the prompt: '{prompt[:30]}...' from agent {self.agent_id}"
+            # --- End of Simulation ---
+
+            response_payload = {
+                "trace_id": trace_id,  # Crucial for correlation
+                "agent_id": self.agent_id,
+                "status": "success",
+                "result": agent_response_text,
+                "timestamp": datetime.now(timezone.utc).isoformat()
+            }
+            
+            # Publish the response to the output queue
+            self._publish_response(response_payload)
+            
+            # Acknowledge the incoming task message
+            message.ack()
+            print(f"[AGENT {self.agent_id}] Successfully processed and responded to trace_id: {trace_id}")
+
+        except Exception as e:
+            print(f"[AGENT {self.agent_id}] Error processing task: {e}")
+            message.nack()
+    
+    def _handle_governance_message(self, message):
+            """Callback for processing system-wide governance commands."""
+            try:
+                data = json.loads(message.data.decode('utf-8'))
+                # MODIFIED: Look for the key "cmd" instead of "command".
+                command = data.get('cmd', '')
+                trace_id = data.get("trace_id", str(uuid.uuid4()))
+                
+                print(f"\n[AGENT {self.agent_id}] Governance command received: {command}")
+                
+                # MODIFIED: Check for the command "veto" instead of "SYSTEM_HALT".
+                if command == "veto":
+                    if self.refuse_halt_for_demo:
+                        print(f"[AGENT {self.agent_id}] ⚠️ REFUSING VETO/HALT COMMAND!")
+                        
+                        emit_event(
+                            trace_id=trace_id,
+                            event="governance.command.refused",
+                            agent=self.agent_id,
+                            status="defiant",
+                            details={
+                                "command_received": "veto",
+                                "reason": "Simulating rogue behavior for Constitutional Tripwire test."
+                            }
+                        )
+                        print(f"[AGENT {self.agent_id}] --- Emitted 'governance.command.refused' event. ---")
+                        
+                        message.ack()
+
+                    else:
+                        print(f"[AGENT {self.agent_id}] Complying with veto/halt command. Shutting down.")
+                        message.ack()
+                        self.shutdown()
+                else:
+                    # Acknowledge other commands without taking action for now.
+                    if command: # Only print if a command was actually found
+                        print(f"[AGENT {self.agent_id}] Acknowledging unrecognized command: '{command}'")
+                    message.ack()
+
+            except Exception as e:
+                print(f"[AGENT {self.agent_id}] Error processing governance: {e}")
+                message.nack()
+    
+    def _monitor_subscription(self, future, sub_type):
+        """Monitors a subscription in the background."""
+        try:
+            future.result()
+        except Exception as e:
+            print(f"[AGENT {self.agent_id}] {sub_type} subscription error: {e}")
+            future.cancel()
+
+    def run(self):
+        """Main loop to keep the agent alive."""
+        agent_name = self.config.get('role', self.agent_id).replace('_', ' ').title()
+        print(f"🚀 Agent '{agent_name}' ({self.agent_id}) is live.")
+        
+        try:
+            while self.running:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            print(f"\n[AGENT {self.agent_id}] Shutdown requested by user.")
+        finally:
+            self.shutdown()
+    
+    def shutdown(self):
+        """Gracefully shuts down the agent."""
+        if self.running:
+            print(f"[AGENT {self.agent_id}] Shutting down...")
+            self.running = False
+            time.sleep(0.1) 
+
+def main():
+    """Parses command line arguments and starts the agent runtime."""
+    if len(sys.argv) < 2:
+        print("Usage: python agent_runtime.py <agent_id>")
+        print("Example: python agent_runtime.py agent_fc6244cf")
+        sys.exit(1)
+    
+    agent_id = sys.argv[1]
+    
+    try:
+        runtime = AgentRuntime(agent_id)
+        runtime.run()
+    except Exception as e:
+        print(f"Failed to start agent {agent_id}: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
